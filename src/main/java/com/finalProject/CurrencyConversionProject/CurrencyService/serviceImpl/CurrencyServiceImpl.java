@@ -17,7 +17,7 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     @Value("${api.accessKey}")
     private String accessKey;
     private final WebClient webClient;
-
+//comment
     public CurrencyServiceImpl() {
         this.webClient = WebClient.create("http://localhost:8080");
     }
