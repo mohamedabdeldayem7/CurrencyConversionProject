@@ -18,16 +18,15 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     private String accessKey;
     private final WebClient webClient;
 //comment
+    //comment
     public CurrencyServiceImpl() {
         this.webClient = WebClient.create("http://localhost:8080");
     }
-
     @Override
     public Object convertAmount(String base, String target, Double amount){
         this.inputValidation.checkCurrency(base);
         this.inputValidation.checkCurrency(target);
         this.inputValidation.checkAmount(amount);
-
         String url = "https://v6.exchangerate-api.com/v6/" + accessKey
                 +"/pair/"+ base + "/" + target + "/" + amount.toString();
 
