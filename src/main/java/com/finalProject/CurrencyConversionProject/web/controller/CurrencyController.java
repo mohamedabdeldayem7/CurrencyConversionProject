@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CurrencyController {
@@ -37,5 +38,25 @@ public class CurrencyController {
 
         return new ResponseEntity(model, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/{base}/{amount}/{target1}/{target2}")
+    public ResponseEntity<ResponseModel<?>> convertAmount(@PathVariable("base") String base,
+                                                          @PathVariable("amount") Double amount,
+                                                          @PathVariable("target") String target1,
+                                                          @PathVariable("amount") String target2)  {
+
+        Object response =  this.currencyService.compareTwoCurrencies(base,amount, target1, target2);
+        ResponseModel<Object> model = ResponseModel.<Object>builder()
+                .data(response).statusCode(HttpStatus.OK.value()).build();
+
+        return new ResponseEntity(model, HttpStatus.OK);
+    }
+    @GetMapping("/currencies")
+    public ResponseEntity<ResponseModel<?>> getCurrencies(){
+        List<Map<String, String>> currencies =  this.currencyService.getCurrencies();
+        ResponseModel<List<Map<String, String>>> model = ResponseModel.<List<Map<String, String>>>builder()
+                .data(currencies).statusCode(HttpStatus.OK.value()).build();
+        return new ResponseEntity(model, HttpStatus.OK);
     }
 }

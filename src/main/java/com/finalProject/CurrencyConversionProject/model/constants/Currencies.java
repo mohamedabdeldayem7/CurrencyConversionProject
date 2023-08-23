@@ -1,7 +1,6 @@
 package com.finalProject.CurrencyConversionProject.model.constants;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +20,11 @@ public enum Currencies {
     QAR("QAR","QATARI","https://flagsapi.com/QA/flat/64.png"),
     SAR("SAR","Saudi","https://flagsapi.com/SA/flat/64.png"),
     EGP("EGP","EGYPT","https://flagsapi.com/EG/flat/64.png")
-;
+    ;
 
-private String code;
-private String name;
-private String url;
+    private String code;
+    private String name;
+    private String url;
 
      Currencies(String code, String name, String url) {
         this.code = code;

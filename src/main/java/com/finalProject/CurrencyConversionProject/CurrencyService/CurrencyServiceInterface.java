@@ -9,4 +9,5 @@ public interface CurrencyServiceInterface {
     Object convertAmount(String base, String target, Double amount);
     Object compareCurrencies(List<String> currencies,String base);
     List<Map<String, String>> getCurrencies();
+    Object compareTwoCurrencies(String base,Double amount, String target1, String target2);
 }
