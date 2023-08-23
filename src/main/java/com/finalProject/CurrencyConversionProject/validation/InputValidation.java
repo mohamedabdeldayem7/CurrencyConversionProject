@@ -1,14 +1,15 @@
 package com.finalProject.CurrencyConversionProject.validation;
 
 import com.finalProject.CurrencyConversionProject.exception.InvalidInputException;
-import com.finalProject.CurrencyConversionProject.model.constants.CurrencyCode;
+import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class InputValidation {
     public void checkCurrency(String currncy){
         Boolean flag = false;
-        for(CurrencyCode code:CurrencyCode.values()){
+        for(Currencies code:Currencies.values()){
             if(code.toString().equalsIgnoreCase(currncy)){
                 flag = true;
                 break;

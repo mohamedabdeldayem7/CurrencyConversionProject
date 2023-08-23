@@ -162,5 +162,4 @@ public enum CurrencyCode {
     KHR,
     KGS,
     KES
-    ;
 }
