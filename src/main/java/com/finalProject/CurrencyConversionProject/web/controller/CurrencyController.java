@@ -1,6 +1,7 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
 
 import com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.model.constants.CurrencyCode;
 import com.finalProject.CurrencyConversionProject.web.response.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,10 +22,9 @@ public class CurrencyController {
     public ResponseEntity<ResponseModel<?>> convertAmount(@PathVariable("base") String base,
                                                         @PathVariable("target") String target,
                                                         @PathVariable("amount") Double amount)  {
-
         Object response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<Object> model = ResponseModel.<Object>builder()
-                .data(response).statusCode(HttpStatus.OK.value()).build();
+                .data(response).build();
 
         return new ResponseEntity(model, HttpStatus.OK);
     }
@@ -33,9 +33,10 @@ public class CurrencyController {
                                                                 @PathVariable("base") String base){
         Object response =  this.currencyService.compareCurrencies(currencies,base);
         ResponseModel<Object> model = ResponseModel.<Object>builder()
-                .data(response).statusCode(HttpStatus.OK.value()).build();
+                .data(response).build();
 
         return new ResponseEntity(model, HttpStatus.OK);
 
     }
+
 }

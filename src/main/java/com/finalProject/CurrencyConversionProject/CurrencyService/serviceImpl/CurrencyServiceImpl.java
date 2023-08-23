@@ -1,6 +1,7 @@
 package com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl;
 
 import com.finalProject.CurrencyConversionProject.CurrencyService.CurrencyServiceInterface;
+import com.finalProject.CurrencyConversionProject.model.constants.CurrencyCode;
 import com.finalProject.CurrencyConversionProject.urlBuilder.Urlbuilder;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import com.google.gson.Gson;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Currency;
 import java.util.List;
 
 @Service
@@ -22,7 +24,7 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     private final WebClient webClient;
 
     public CurrencyServiceImpl() {
-        this.webClient = WebClient.create("http://localhost:8080");
+        this.webClient = WebClient.create("");
     }
     @Override
     public Object convertAmount(String base, String target, Double amount){
@@ -67,5 +69,6 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
         return convertedObject;
     }
+
 
 }
