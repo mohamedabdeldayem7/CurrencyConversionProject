@@ -1,6 +1,7 @@
 package com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl;
 
 import com.finalProject.CurrencyConversionProject.CurrencyService.CurrencyServiceInterface;
+import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
 import com.finalProject.CurrencyConversionProject.urlBuilder.Urlbuilder;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import com.google.gson.Gson;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyServiceInterface {
@@ -53,10 +55,14 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
                 .uri(url)
                 .retrieve()
                 .bodyToMono(String.class).block();
-
         Object responseObject = this.convertToJsonObject(response);
         return responseObject;
 
+    }
+
+    @Override
+    public List<Map<String, String>> getCurrencies() {
+        return Currencies.getCurrencies();
     }
 
     private Object convertToJsonObject(String response){

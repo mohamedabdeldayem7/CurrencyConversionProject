@@ -1,6 +1,7 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
 
 import com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
 import com.finalProject.CurrencyConversionProject.web.response.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class CurrencyController {
@@ -26,6 +28,13 @@ public class CurrencyController {
         ResponseModel<Object> model = ResponseModel.<Object>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
 
+        return new ResponseEntity(model, HttpStatus.OK);
+    }
+    @GetMapping("/currencies")
+    public ResponseEntity<ResponseModel<?>> getCurrencies(){
+        List<Map<String, String>> currencies =  this.currencyService.getCurrencies();
+        ResponseModel<List<Map<String, String>>> model = ResponseModel.<List<Map<String, String>>>builder()
+                .data(currencies).statusCode(HttpStatus.OK.value()).build();
         return new ResponseEntity(model, HttpStatus.OK);
     }
     @GetMapping("/{currencies}/{base}")
