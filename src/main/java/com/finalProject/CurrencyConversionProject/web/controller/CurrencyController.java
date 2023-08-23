@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class CurrencyController {
     @Autowired
@@ -25,5 +27,15 @@ public class CurrencyController {
                 .data(response).statusCode(HttpStatus.OK.value()).build();
 
         return new ResponseEntity(model, HttpStatus.OK);
+    }
+    @GetMapping("/{currencies}/{base}")
+    public ResponseEntity<ResponseModel<?>> comparingCurrencies(@PathVariable("currencies" )List<String>currencies,
+                                                                @PathVariable("base") String base){
+        Object response =  this.currencyService.compareCurrencies(currencies,base);
+        ResponseModel<Object> model = ResponseModel.<Object>builder()
+                .data(response).statusCode(HttpStatus.OK.value()).build();
+
+        return new ResponseEntity(model, HttpStatus.OK);
+
     }
 }

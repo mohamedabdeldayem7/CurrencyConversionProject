@@ -1,6 +1,7 @@
 package com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl;
 
 import com.finalProject.CurrencyConversionProject.CurrencyService.CurrencyServiceInterface;
+import com.finalProject.CurrencyConversionProject.urlBuilder.Urlbuilder;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +9,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
+import java.util.List;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyServiceInterface {
     @Autowired
     InputValidation inputValidation;
-    @Value("${api.accessKey}")
-    private String accessKey;
+    @Value("${api1.accessKey}")
+    private String accessKeyToConvertAmount;
+    @Value("${api2.accessKey}")
+    private String accessKeyToCompareCurrencies;
     private final WebClient webClient;
-//comment
-    //comment
+
     public CurrencyServiceImpl() {
         this.webClient = WebClient.create("http://localhost:8080");
     }
@@ -27,9 +29,8 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
         this.inputValidation.checkCurrency(base);
         this.inputValidation.checkCurrency(target);
         this.inputValidation.checkAmount(amount);
-        String url = "https://v6.exchangerate-api.com/v6/" + accessKey
+        String url = "https://v6.exchangerate-api.com/v6/" + accessKeyToConvertAmount
                 +"/pair/"+ base + "/" + target + "/" + amount.toString();
-
         String  response = webClient.get()
                 .uri(url)
                 .retrieve()
@@ -37,6 +38,25 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
         Object responseObject = this.convertToJsonObject(response);
         return responseObject;
+    }
+
+    @Override
+    public Object compareCurrencies(List<String> currencies, String base) {
+        for (String currency:currencies){
+            this.inputValidation.checkCurrency(currency);
+        }
+        this.inputValidation.checkCurrency(base);
+        String baseurl = "http://apilayer.net/api/live?access_key=" +accessKeyToCompareCurrencies+
+                "&currencies=";
+        String url= Urlbuilder.buildURLWithList(baseurl,currencies)+"&source="+base+"&format=1";
+        String  response = webClient.get()
+                .uri(url)
+                .retrieve()
+                .bodyToMono(String.class).block();
+
+        Object responseObject = this.convertToJsonObject(response);
+        return responseObject;
+
     }
 
     private Object convertToJsonObject(String response){
