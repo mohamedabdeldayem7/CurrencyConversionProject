@@ -30,7 +30,7 @@ public class CurrencyController {
         return new ResponseEntity(model, HttpStatus.OK);
     }
     @GetMapping("/{currencies}/{base}")
-    public ResponseEntity<ResponseModel<?>> comparingCurrencies(@PathVariable("currencies" )List<String>currencies,
+    public ResponseEntity<ResponseModel<?>> getConversionRates(@PathVariable("currencies" )List<String>currencies,
                                                                 @PathVariable("base") String base){
         Object response =  this.currencyService.compareCurrencies(currencies,base);
         ResponseModel<Object> model = ResponseModel.<Object>builder()
@@ -41,7 +41,7 @@ public class CurrencyController {
     }
 
     @GetMapping("/{base}/{amount}/{target1}/{target2}")
-    public ResponseEntity<ResponseModel<?>> convertAmount(@PathVariable("base") String base,
+    public ResponseEntity<ResponseModel<?>> compareTwoCurrencies(@PathVariable("base") String base,
                                                           @PathVariable("amount") Double amount,
                                                           @PathVariable("target") String target1,
                                                           @PathVariable("amount") String target2)  {
