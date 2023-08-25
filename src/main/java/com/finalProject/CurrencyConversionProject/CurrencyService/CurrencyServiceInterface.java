@@ -11,5 +11,5 @@ public interface CurrencyServiceInterface {
     AmountConversionDto convertAmount(String base, String target, Double amount);
     FavoriteCurrenciesDto compareCurrencies(List<String> currencies, String base);
     List<Map<String, String>> getCurrencies();
-    TwoCurrenciesComparisonDto compareTwoCurrencies(String base, Double amount, List<String> targetCurrencies);
+    TwoCurrenciesComparisonDto compareTwoCurrencies(String base, Double amount,String target1,String target2);
 }

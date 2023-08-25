@@ -59,21 +59,18 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     }
 
     @Override
-    public TwoCurrenciesComparisonDto compareTwoCurrencies(String base, Double amount, List<String> targetCurrencies) {
-        this.inputValidation.checkList(targetCurrencies, 2);
+    public TwoCurrenciesComparisonDto compareTwoCurrencies(String base, Double amount,String target1,String target2) {
         this.inputValidation.checkCurrency(base);
         this.inputValidation.checkAmount(amount);
+        this.inputValidation.checkCurrency(target1);
+        this.inputValidation.checkCurrency(target2);
 
-        List<AmountConversionDto> reponseList = new ArrayList<>();
-
-        targetCurrencies.stream().forEach(target -> {
-            AmountConversionDto response = (AmountConversionDto) this.currencyRepository.convertAmount(base, target, amount);
-            reponseList.add(response);
-        });
+        AmountConversionDto response1 = (AmountConversionDto) this.currencyRepository.convertAmount(base, target1, amount);
+        AmountConversionDto response2 = (AmountConversionDto) this.currencyRepository.convertAmount(base, target2, amount);
 
         TwoCurrenciesComparisonDto finalResponse = TwoCurrenciesComparisonDto.builder()
-                .firstTargetCurrency(reponseList.get(0))
-                .secondTargetCurrency(reponseList.get(1))
+                .firstTargetCurrency(response1)
+                .secondTargetCurrency(response2)
                 .build();
         return finalResponse;
     }

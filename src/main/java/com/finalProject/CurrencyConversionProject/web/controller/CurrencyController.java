@@ -19,10 +19,10 @@ public class CurrencyController {
     private CurrencyServiceImpl currencyService;
 
 
-    @GetMapping("/{base}/{target}/{amount}")
-    public ResponseEntity<ResponseModel<?>> convertAmount(@PathVariable("base") String base,
-                                                        @PathVariable("target") String target,
-                                                        @PathVariable("amount") Double amount)  {
+    @GetMapping("/pair-conversion")
+    public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
+                                                          @RequestParam(value = "target",required = false, defaultValue = "USD") String target,
+                                                          @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
 
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
@@ -30,9 +30,9 @@ public class CurrencyController {
 
         return new ResponseEntity(model, HttpStatus.OK);
     }
-    @PostMapping("/{base}")
+    @PostMapping("/favorite-currencies")
     public ResponseEntity<ResponseModel<?>> getConversionRates(@RequestBody List<String>currencies,
-                                                                @PathVariable("base") String base){
+                                                               @RequestParam(value = "base",required = false, defaultValue = "USD") String base){
         FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
         ResponseModel<FavoriteCurrenciesDto> model = ResponseModel.<FavoriteCurrenciesDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
@@ -40,14 +40,13 @@ public class CurrencyController {
         return new ResponseEntity(model, HttpStatus.OK);
 
     }
+    @GetMapping("/comparison")
+    public ResponseEntity<ResponseModel<?>> compareTwoCurrencies(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
+                                                                 @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount,
+                                                                 @RequestParam(value = "target1",required = false, defaultValue = "USD") String target1,
+                                                                 @RequestParam(value = "target2",required = false, defaultValue = "USD") String target2)  {
 
-
-    @PostMapping("/{base}/{amount}")
-    public ResponseEntity<ResponseModel<?>> compareTwoCurrencies(@PathVariable("base") String base,
-                                                          @PathVariable("amount") Double amount,
-                                                          @RequestBody List<String> targetCurrecies)  {
-
-        TwoCurrenciesComparisonDto response =  this.currencyService.compareTwoCurrencies(base, amount, targetCurrecies);
+        TwoCurrenciesComparisonDto response =  this.currencyService.compareTwoCurrencies(base, amount, target1,target2);
         ResponseModel<TwoCurrenciesComparisonDto> model = ResponseModel.<TwoCurrenciesComparisonDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
         return new ResponseEntity(model, HttpStatus.OK);
