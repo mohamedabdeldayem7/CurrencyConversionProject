@@ -1,16 +1,17 @@
 package com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl;
 
 import com.finalProject.CurrencyConversionProject.CurrencyService.CurrencyServiceInterface;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
+import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
+import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
 import com.finalProject.CurrencyConversionProject.repository.CurrencyRepository;
-import com.finalProject.CurrencyConversionProject.urlBuilder.Urlbuilder;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,65 +24,59 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
 
     @Override
-    public Object convertAmount(String base, String target, Double amount){
+    public AmountConversionDto convertAmount(String base, String target, Double amount){
         this.inputValidation.checkCurrency(base);
         this.inputValidation.checkCurrency(target);
         this.inputValidation.checkAmount(amount);
 
-        String response = (String) this.currencyRepository.convertAmount(base, target, amount);
-
-        Object responseObject = this.convertToJsonObject(response);
+        AmountConversionDto responseObject = (AmountConversionDto) this.currencyRepository.convertAmount(base, target, amount);;
         return responseObject;
     }
 
-//    @Override
-//    public Object compareCurrencies(List<String> currencies, String base) {
-//        for (String currency:currencies){
-//            this.inputValidation.checkCurrency(currency);
-//        }
-//        this.inputValidation.checkCurrency(base);
-//        String baseurl = "http://apilayer.net/api/live?access_key=" +accessKeyToCompareCurrencies+
-//                "&currencies=";
-//        String url= Urlbuilder.buildURLWithList(baseurl,currencies)+"&source="+base+"&format=1";
-//        String  response = webClient.get()
-//                .uri(url)
-//                .retrieve()
-//                .bodyToMono(String.class).block();
-//
-//        Object responseObject = this.convertToJsonObject(response);
-//        return responseObject;
-//
-//    }
-
     @Override
-    public Object compareCurrencies(List<String> currencies, String base) {
-        for (String currency : currencies) {
-            this.inputValidation.checkCurrency(currency);
-        }
+    public FavoriteCurrenciesDto compareCurrencies(List<String> currencies, String base) {
+
+        this.inputValidation.checkList(currencies, currencies.size());
         this.inputValidation.checkCurrency(base);
 
-        String response = this.currencyRepository.compareCurrencies(base);
+        FavoriteCurrenciesDto responseObject = (FavoriteCurrenciesDto) this.currencyRepository.compareCurrencies(base);
 
-        Object responseObject = this.convertToJsonObject(response);
-        return responseObject;
+        Map<String ,Double> finalMap = new HashMap<>();
+        Map<String, Double> responseMap = responseObject.getConversion_rates();
+
+        currencies.stream().forEach(currency -> finalMap.put(currency, responseMap.get(currency)));
+
+        FavoriteCurrenciesDto finalResponseObject = FavoriteCurrenciesDto.builder()
+                .conversion_rates(finalMap)
+                .build();
+
+        return finalResponseObject;
     }
     @Override
     public List<Map<String, String>> getCurrencies() {
-        return Currencies.getCurrencies();
+        List<Map<String, String>> currencies = Currencies.getCurrencies();
+        return currencies;
     }
 
     @Override
-    public Object compareTwoCurrencies(String base,Double amount, String target1, String target2) {
-        return null;
+    public TwoCurrenciesComparisonDto compareTwoCurrencies(String base, Double amount, List<String> targetCurrencies) {
+        this.inputValidation.checkList(targetCurrencies, 2);
+        this.inputValidation.checkCurrency(base);
+        this.inputValidation.checkAmount(amount);
+
+        List<AmountConversionDto> reponseList = new ArrayList<>();
+
+        targetCurrencies.stream().forEach(target -> {
+            AmountConversionDto response = (AmountConversionDto) this.currencyRepository.convertAmount(base, target, amount);
+            reponseList.add(response);
+        });
+
+        TwoCurrenciesComparisonDto finalResponse = TwoCurrenciesComparisonDto.builder()
+                .firstTargetCurrency(reponseList.get(0))
+                .secondTargetCurrency(reponseList.get(1))
+                .build();
+        return finalResponse;
     }
 
-    private Object convertToJsonObject(String response){
-        String json = response;
-
-        Gson gson = new Gson();
-        Object convertedObject = gson.fromJson(json, Object.class);
-
-        return convertedObject;
-    }
 
 }
