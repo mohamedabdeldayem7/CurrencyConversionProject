@@ -1,16 +1,15 @@
-package com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl;
+package com.finalProject.CurrencyConversionProject.currencyService.serviceImpl;
 
-import com.finalProject.CurrencyConversionProject.CurrencyService.CurrencyServiceInterface;
+import com.finalProject.CurrencyConversionProject.currencyService.CurrencyServiceInterface;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
-import com.finalProject.CurrencyConversionProject.repository.CurrencyRepository;
+import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     @Autowired
     InputValidation inputValidation;
     @Autowired
-    private CurrencyRepository currencyRepository;
+    private CurrenncyApiServiceInterface currencyRepository;
 
 
     @Override

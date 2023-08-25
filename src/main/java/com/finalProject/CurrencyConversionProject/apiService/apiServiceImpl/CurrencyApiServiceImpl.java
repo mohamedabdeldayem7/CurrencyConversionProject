@@ -1,15 +1,16 @@
-package com.finalProject.CurrencyConversionProject.repository.repositoryImpl;
+package com.finalProject.CurrencyConversionProject.apiService.apiServiceImpl;
 
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
-import com.finalProject.CurrencyConversionProject.repository.CurrencyRepository;
+import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-@Repository
-public class CurrencyRepositoryImpl implements CurrencyRepository {
+@Service
+public class CurrencyApiServiceImpl implements CurrenncyApiServiceInterface {
     @Value("${api.accessKey}")
     private String accessKey;
     @Value("${base_url}")
@@ -18,7 +19,7 @@ public class CurrencyRepositoryImpl implements CurrencyRepository {
     private Gson gson;
     private final WebClient webClient;
 
-    public CurrencyRepositoryImpl() {
+    public CurrencyApiServiceImpl() {
         this.webClient = WebClient.create("");
         gson = new Gson();
     }
