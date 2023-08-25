@@ -34,7 +34,7 @@ public class CurrencyController {
     public ResponseEntity<ResponseModel<?>> getConversionRates(@RequestBody List<String>currencies,
                                                                 @PathVariable("base") String base){
         FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
-        ResponseModel<Object> model = ResponseModel.<Object>builder()
+        ResponseModel<FavoriteCurrenciesDto> model = ResponseModel.<FavoriteCurrenciesDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
 
         return new ResponseEntity(model, HttpStatus.OK);
@@ -48,9 +48,8 @@ public class CurrencyController {
                                                           @RequestBody List<String> targetCurrecies)  {
 
         TwoCurrenciesComparisonDto response =  this.currencyService.compareTwoCurrencies(base, amount, targetCurrecies);
-        ResponseModel<Object> model = ResponseModel.<Object>builder()
+        ResponseModel<TwoCurrenciesComparisonDto> model = ResponseModel.<TwoCurrenciesComparisonDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
-
         return new ResponseEntity(model, HttpStatus.OK);
     }
     @GetMapping("/currencies")
