@@ -1,13 +1,14 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
 
 import com.finalProject.CurrencyConversionProject.CurrencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
+import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
+import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.web.response.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -23,16 +24,16 @@ public class CurrencyController {
                                                         @PathVariable("target") String target,
                                                         @PathVariable("amount") Double amount)  {
 
-        Object response =  this.currencyService.convertAmount(base, target, amount);
-        ResponseModel<Object> model = ResponseModel.<Object>builder()
+        AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
+        ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
 
         return new ResponseEntity(model, HttpStatus.OK);
     }
-    @GetMapping("/{currencies}/{base}")
-    public ResponseEntity<ResponseModel<?>> getConversionRates(@PathVariable("currencies" )List<String>currencies,
+    @PostMapping("/{base}")
+    public ResponseEntity<ResponseModel<?>> getConversionRates(@RequestBody List<String>currencies,
                                                                 @PathVariable("base") String base){
-        Object response =  this.currencyService.compareCurrencies(currencies,base);
+        FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
         ResponseModel<Object> model = ResponseModel.<Object>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
 
@@ -40,13 +41,13 @@ public class CurrencyController {
 
     }
 
-    @GetMapping("/{base}/{amount}/{target1}/{target2}")
+
+    @PostMapping("/{base}/{amount}")
     public ResponseEntity<ResponseModel<?>> compareTwoCurrencies(@PathVariable("base") String base,
                                                           @PathVariable("amount") Double amount,
-                                                          @PathVariable("target") String target1,
-                                                          @PathVariable("amount") String target2)  {
+                                                          @RequestBody List<String> targetCurrecies)  {
 
-        Object response =  this.currencyService.compareTwoCurrencies(base,amount, target1, target2);
+        TwoCurrenciesComparisonDto response =  this.currencyService.compareTwoCurrencies(base, amount, targetCurrecies);
         ResponseModel<Object> model = ResponseModel.<Object>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
 
