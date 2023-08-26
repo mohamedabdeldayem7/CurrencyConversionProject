@@ -1,4 +1,5 @@
 package com.finalProject.CurrencyConversionProject.currencyService;
+
 import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
@@ -106,5 +107,5 @@ class CurrencyServiceTest {
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getFirstTargetCurrency().getConversion_result()).isEqualTo(firstTargetCurrency.getConversion_result());
         Assertions.assertThat(response.getSecondTargetCurrency().getConversion_result()).isEqualTo(secondTargetCurrency.getConversion_result());
-    }
+
 }
