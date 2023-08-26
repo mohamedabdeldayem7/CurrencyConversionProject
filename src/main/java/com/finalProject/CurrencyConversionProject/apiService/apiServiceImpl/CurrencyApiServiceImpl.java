@@ -36,7 +36,7 @@ public class CurrencyApiServiceImpl implements CurrenncyApiServiceInterface {
     }
 
     @Override
-    public Object compareCurrencies(String base) {
+    public FavoriteCurrenciesDto compareCurrencies(String base) {
         String url = baseUrl + accessKey + "/latest/" + base;
 
         String  jsonResponse = getResponse(url);

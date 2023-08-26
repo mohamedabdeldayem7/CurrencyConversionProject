@@ -35,7 +35,9 @@ public class CurrencyController {
                                                                @RequestParam(value = "base",required = false, defaultValue = "USD") String base){
         FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
         ResponseModel<FavoriteCurrenciesDto> model = ResponseModel.<FavoriteCurrenciesDto>builder()
-                .data(response).statusCode(HttpStatus.OK.value()).build();
+                .data(response)
+                .statusCode(HttpStatus.OK.value())
+                .status("success").build();
 
         return new ResponseEntity(model, HttpStatus.OK);
 
