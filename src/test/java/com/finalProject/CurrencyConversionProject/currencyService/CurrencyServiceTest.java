@@ -5,10 +5,10 @@ import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.Cu
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
+import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
 class CurrencyServiceTest {
@@ -40,16 +40,16 @@ class CurrencyServiceTest {
     @DisplayName("JUnit test for convertAmount method")
     @Test
     void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() {
-        String base="USD";
-        String target="EGP";
-        Double amount=1.0;
-        Double conversion_result=30.9015;
-        AmountConversionDto amountConversionDto=AmountConversionDto.builder()
+        String base = "USD";
+        String target = "EGP";
+        Double amount = 1.0;
+        Double conversion_result = 30.9015;
+        AmountConversionDto amountConversionDto = AmountConversionDto.builder()
                 .conversion_result(conversion_result).build();
 
-        when(currenncyApiService.convertAmount(base,target,amount)).thenReturn(amountConversionDto);
+        when(currenncyApiService.convertAmount(base, target, amount)).thenReturn(amountConversionDto);
 
-        AmountConversionDto response=this.currencyService.convertAmount(base,target,amount);
+        AmountConversionDto response = this.currencyService.convertAmount(base, target, amount);
 
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getConversion_result()).isEqualTo(amountConversionDto.getConversion_result());
@@ -81,12 +81,18 @@ class CurrencyServiceTest {
     }
 
     @Test
-    @Disabled
-    void getCurrencies() {
+    @DisplayName("JUnit test for getCurrencies method")
+    void givenCurrenciesList_whenGetCurrencies_thenReturnCurrenciesList() {
+        List<Map<String, String>> expectedResponse = Currencies.getCurrencies();
+
+        List<Map<String, String>> response = this.currencyService.getCurrencies();
+
+        assertThat(response).isEqualTo(expectedResponse);
     }
 
-    @Test
+
     @DisplayName("JUnit test for compareTwoCurrencies method")
+    @Test
     void givenBaseAndAmountAndTarget1AndTarget2_whenConvertAmount_thenReturnTwoCurrenciesComparisonDto() {
         String base="USD";
         Double amount=1.0;
@@ -107,5 +113,7 @@ class CurrencyServiceTest {
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getFirstTargetCurrency().getConversion_result()).isEqualTo(firstTargetCurrency.getConversion_result());
         Assertions.assertThat(response.getSecondTargetCurrency().getConversion_result()).isEqualTo(secondTargetCurrency.getConversion_result());
+
+    }
 
 }

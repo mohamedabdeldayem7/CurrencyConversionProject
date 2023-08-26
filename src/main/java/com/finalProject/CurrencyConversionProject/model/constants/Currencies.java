@@ -24,12 +24,12 @@ public enum Currencies {
 
     private String code;
     private String name;
-    private String url;
+    private String flagUrl;
 
-     Currencies(String code, String name, String url) {
+     Currencies(String code, String name, String flagUrl) {
         this.code = code;
         this.name = name;
-        this.url = url;
+        this.flagUrl = flagUrl;
     }
 
     public static List<Map<String, String>> getCurrencies() {
@@ -38,7 +38,7 @@ public enum Currencies {
             Map<String, String> map = new HashMap<>();
             map.put("code", currency.getCode());
             map.put("name", currency.getName());
-            map.put("url", currency.getUrl());
+            map.put("flagUrl", currency.getFlagUrl());
             list.add(map);
         }
         return list;
