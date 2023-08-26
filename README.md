@@ -3,11 +3,11 @@ This is a back-end currency conversion project
 
 ## Architecture of Currency Conversion API
 
-## <mark style="background: #FFB86CA6;">1- Conversion Api</mark>
+## <mark style="background: #FFB86CA6;">1- pair-conversio Api</mark>
 
 ### Api Contract :
 ```
-GET : {{base_url}}/pair-conversion
+GET : {base_url}/pair-conversion
 	?base={base_currency}
 	&target={target_currency}
 	&amount={amount}
@@ -33,11 +33,11 @@ GET : localhost:8080/pair-conversion
 
 ****
 
-## <mark style="background: #FFB86CA6;">2- Compare API</mark>
+## <mark style="background: #FFB86CA6;">2- comparison API</mark>
 
 ### Api Contract :
 ```
-GET : {{base_url}}/comparison
+GET : {base_url}/comparison
 	?base={base_currency}
 	&target1={target_currency_1}
 	&target={target_currency_2}
@@ -70,7 +70,7 @@ GET : localhost:8080/comparison
 
 ****
 
-## <mark style="background: #FFB86CA6;">3- Rate Compare</mark>
+## <mark style="background: #FFB86CA6;">3- Favorite currencies Api</mark>
 
 ### Api Contract :
 
@@ -78,14 +78,14 @@ GET : localhost:8080/comparison
 
 ```
 
-POST : {{base_url}}/comparison
+POST : {base_url}/favorite-currencies
 	?base={base_currency}
 
 Body : [
-			"EGP",
-			"EUR",
-      "SAR"
-	]
+         "EGP",
+	 "EUR",
+         "SAR"
+       ]
 ```
 
 ### Request Example :
@@ -96,10 +96,10 @@ POST : localhost:8080/comparison
 	?base=USD
 
 Body : [
-			"EGP",
-			"EUR",
-      "SAR"
-	]
+	"EGP",
+	"EUR",
+        "SAR"
+       ]	
 ```
 
 ### Response Example :
@@ -119,11 +119,11 @@ Body : [
 
 ****
 
-## <mark style="background: #FFB86CA6;">4- Get All Currencies</mark>
+## <mark style="background: #FFB86CA6;">4- Get All Currencies Api</mark>
 
 ### Api Contract :
 ```
-GET : {{base_url}}/currencies
+GET : {base_url}/currencies
 ```
 
 ### Request Example :
