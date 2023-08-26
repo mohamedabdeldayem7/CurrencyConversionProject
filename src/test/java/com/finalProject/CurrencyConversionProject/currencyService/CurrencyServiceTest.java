@@ -4,6 +4,7 @@ import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiService
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
+import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +86,26 @@ class CurrencyServiceTest {
     }
 
     @Test
-    @Disabled
-    void compareTwoCurrencies() {
-    }
+    @DisplayName("JUnit test for compareTwoCurrencies method")
+    void givenBaseAndAmountAndTarget1AndTarget2_whenConvertAmount_thenReturnTwoCurrenciesComparisonDto() {
+        String base="USD";
+        Double amount=1.0;
+        String target1="EGP";
+        String target2="EUR";
+        AmountConversionDto firstTargetCurrency= AmountConversionDto.builder()
+                .conversion_result(30.9015).build();
+        AmountConversionDto secondTargetCurrency= AmountConversionDto.builder()
+                .conversion_result(0.9262).build();
+        TwoCurrenciesComparisonDto expectedResponse=TwoCurrenciesComparisonDto.builder()
+                .firstTargetCurrency(firstTargetCurrency)
+                .secondTargetCurrency(secondTargetCurrency).build();
+
+        when(currenncyApiService.convertAmount(base,target1,amount)).thenReturn(firstTargetCurrency);
+        when(currenncyApiService.convertAmount(base,target2,amount)).thenReturn(secondTargetCurrency);
+
+        TwoCurrenciesComparisonDto response=this.currencyService.compareTwoCurrencies(base,amount,target1,target2);
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getFirstTargetCurrency().getConversion_result()).isEqualTo(firstTargetCurrency.getConversion_result());
+        Assertions.assertThat(response.getSecondTargetCurrency().getConversion_result()).isEqualTo(secondTargetCurrency.getConversion_result());
+
 }
