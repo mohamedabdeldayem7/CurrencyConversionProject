@@ -1,24 +1,14 @@
-<<<<<<< HEAD
 package com.finalProject.CurrencyConversionProject.currencyService;
 
 import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
-=======
-package com.finalProject.CurrencyConversionProject.CurrencyService;
-
-import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
-import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
->>>>>>> 6a1432678803860a04dc7545296cefb9dddab760
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-<<<<<<< HEAD
-=======
 import org.junit.jupiter.api.DisplayName;
->>>>>>> 6a1432678803860a04dc7545296cefb9dddab760
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -45,16 +35,7 @@ class CurrencyServiceTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
     }
-<<<<<<< HEAD
-    @Test
-    @Disabled
-    void convertAmount() {
 
-    }
-
-    @Test
-    void compareCurrencies() {
-=======
     @DisplayName("JUnit test for convertAmount method")
     @Test
     void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() {
@@ -74,10 +55,9 @@ class CurrencyServiceTest {
     }
 
 
-@DisplayName("JUnit test for compareCurrencies method")
+    @DisplayName("JUnit test for compareCurrencies method")
     @Test
     void givenBaseAndListOfFavoriteCurrencies_whenCompareCurrencies_thenReturnFavoriteCurrenciesDto() {
->>>>>>> 6a1432678803860a04dc7545296cefb9dddab760
         String base = "USD";
 
         List<String> favorites = Arrays.asList("EUR", "EGP");
@@ -99,22 +79,13 @@ class CurrencyServiceTest {
         Assertions.assertThat(response.getConversion_rates()).isEqualTo(favoriteCurrenciesDto.getConversion_rates());
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6a1432678803860a04dc7545296cefb9dddab760
     @Test
     @Disabled
     void getCurrencies() {
     }
 
     @Test
-<<<<<<< HEAD
     @Disabled
     void compareTwoCurrencies() {
-=======
-    void compareTwoCurrencies() {
-
->>>>>>> 6a1432678803860a04dc7545296cefb9dddab760
     }
 }
