@@ -1,6 +1,6 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
-import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 
+import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
@@ -18,12 +18,10 @@ public class CurrencyController {
     @Autowired
     private CurrencyServiceImpl currencyService;
 
-
     @GetMapping("/pair-conversion")
     public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
                                                           @RequestParam(value = "target",required = false, defaultValue = "USD") String target,
                                                           @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
-
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
@@ -47,7 +45,6 @@ public class CurrencyController {
                                                                  @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount,
                                                                  @RequestParam(value = "target1",required = false, defaultValue = "USD") String target1,
                                                                  @RequestParam(value = "target2",required = false, defaultValue = "USD") String target2)  {
-
         TwoCurrenciesComparisonDto response =  this.currencyService.compareTwoCurrencies(base, amount, target1,target2);
         ResponseModel<TwoCurrenciesComparisonDto> model = ResponseModel.<TwoCurrenciesComparisonDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
