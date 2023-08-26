@@ -3,7 +3,7 @@ This is a back-end currency conversion project
 
 ## Architecture of Currency Conversion API
 
-## <mark style="background: #FFB86CA6;">1- pair-conversio Api</mark>
+## <mark style="background: #FFB86CA6;">1- pair-conversion Api</mark>
 
 ### Api Contract :
 ```
