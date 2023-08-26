@@ -18,12 +18,10 @@ public class CurrencyController {
     @Autowired
     private CurrencyServiceImpl currencyService;
 
-
     @GetMapping("/pair-conversion")
     public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
                                                           @RequestParam(value = "target",required = false, defaultValue = "USD") String target,
                                                           @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
-
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
@@ -39,21 +37,20 @@ public class CurrencyController {
                 .data(response)
                 .statusCode(HttpStatus.OK.value())
                 .status("success").build();
-
         return new ResponseEntity(model, HttpStatus.OK);
     }
+
     @GetMapping("/comparison")
     public ResponseEntity<ResponseModel<?>> compareTwoCurrencies(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
                                                                  @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount,
                                                                  @RequestParam(value = "target1",required = false, defaultValue = "USD") String target1,
                                                                  @RequestParam(value = "target2",required = false, defaultValue = "USD") String target2)  {
-
         TwoCurrenciesComparisonDto response =  this.currencyService.compareTwoCurrencies(base, amount, target1,target2);
         ResponseModel<TwoCurrenciesComparisonDto> model = ResponseModel.<TwoCurrenciesComparisonDto>builder()
                 .data(response).statusCode(HttpStatus.OK.value()).build();
         return new ResponseEntity(model, HttpStatus.OK);
     }
-    
+
     @GetMapping("/currencies")
     public ResponseEntity<ResponseModel<?>> getCurrencies(){
         List<Map<String, String>> currencies =  this.currencyService.getCurrencies();
