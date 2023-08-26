@@ -30,6 +30,7 @@ public class CurrencyController {
 
         return new ResponseEntity(model, HttpStatus.OK);
     }
+
     @PostMapping("/favorite-currencies")
     public ResponseEntity<ResponseModel<?>> getConversionRates(@RequestBody List<String>currencies,
                                                                @RequestParam(value = "base",required = false, defaultValue = "USD") String base){
@@ -40,7 +41,6 @@ public class CurrencyController {
                 .status("success").build();
 
         return new ResponseEntity(model, HttpStatus.OK);
-
     }
     @GetMapping("/comparison")
     public ResponseEntity<ResponseModel<?>> compareTwoCurrencies(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
@@ -53,6 +53,7 @@ public class CurrencyController {
                 .data(response).statusCode(HttpStatus.OK.value()).build();
         return new ResponseEntity(model, HttpStatus.OK);
     }
+    
     @GetMapping("/currencies")
     public ResponseEntity<ResponseModel<?>> getCurrencies(){
         List<Map<String, String>> currencies =  this.currencyService.getCurrencies();
