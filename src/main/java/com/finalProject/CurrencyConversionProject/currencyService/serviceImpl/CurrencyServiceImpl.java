@@ -24,6 +24,8 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
     @Override
     public AmountConversionDto convertAmount(String base, String target, Double amount){
+        base.toUpperCase();
+        target.toUpperCase();
         this.inputValidation.checkCurrency(base);
         this.inputValidation.checkCurrency(target);
         this.inputValidation.checkAmount(amount);
@@ -34,19 +36,20 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
     @Override
     public FavoriteCurrenciesDto compareCurrencies(List<String> currencies, String base) {
-
+        base.toUpperCase();
+        currencies.stream().forEach(currency -> currency.toUpperCase());
         this.inputValidation.checkList(currencies, currencies.size());
         this.inputValidation.checkCurrency(base);
 
         FavoriteCurrenciesDto responseObject = (FavoriteCurrenciesDto) this.currencyRepository.compareCurrencies(base);
 
-        Map<String ,Double> finalMap = new HashMap<>();
+        Map<String ,Double> finalResponseMap = new HashMap<>();
         Map<String, Double> responseMap = responseObject.getConversion_rates();
 
-        currencies.stream().forEach(currency -> finalMap.put(currency, responseMap.get(currency)));
+        currencies.stream().forEach(currency -> finalResponseMap.put(currency, responseMap.get(currency)));
 
         FavoriteCurrenciesDto finalResponseObject = FavoriteCurrenciesDto.builder()
-                .conversion_rates(finalMap)
+                .conversion_rates(finalResponseMap)
                 .build();
 
         return finalResponseObject;
@@ -59,6 +62,9 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
     @Override
     public TwoCurrenciesComparisonDto compareTwoCurrencies(String base, Double amount,String target1,String target2) {
+        base.toUpperCase();
+        target1.toUpperCase();
+        target2.toUpperCase();
         this.inputValidation.checkCurrency(base);
         this.inputValidation.checkAmount(amount);
         this.inputValidation.checkCurrency(target1);
