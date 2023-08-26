@@ -5,6 +5,8 @@ import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
 
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class InputValidation {
     public void checkCurrency(String currncy){
@@ -23,5 +25,11 @@ public class InputValidation {
         if(amount < 0){
             throw new InvalidInputException("Invalid amount");
         }
+    }
+    public void checkList(List<String> currencies, Integer size){
+        if(currencies.size() != size){
+            throw new InvalidInputException("Invalid size");
+        }
+        currencies.stream().forEach(currrecy -> this.checkCurrency(currrecy));
     }
 }

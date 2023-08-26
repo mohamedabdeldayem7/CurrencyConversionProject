@@ -13,7 +13,7 @@ public enum Currencies {
     USD("USD","United States","https://flagsapi.com/US/flat/64.png"),
     GBP("GBP","England","https://flagsapi.com/GB/flat/64.png"),
     AED("AED","The United Arab Emirates","https://flagsapi.com/AE/flat/64.png"),
-    BHB("BHB","Bahrain","https://flagsapi.com/BH/flat/64.png"),
+    BHD("BHD","Bahrain","https://flagsapi.com/BH/flat/64.png"),
     JPY("JPY","Japan","https://flagsapi.com/JP/flat/64.png"),
     KWD("KWD","Kuwait","https://flagsapi.com/KW/flat/64.png"),
     OMR("OMR","Oman","https://flagsapi.com/OM/flat/64.png"),
