@@ -1,12 +1,14 @@
-package com.finalProject.CurrencyConversionProject.currencyService;
+package com.finalProject.CurrencyConversionProject.CurrencyService;
 
 import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,14 +35,28 @@ class CurrencyServiceTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
     }
+    @DisplayName("JUnit test for convertAmount method")
     @Test
-    @Disabled
-    void convertAmount() {
+    void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() {
+        String base="USD";
+        String target="EGP";
+        Double amount=1.0;
+        Double conversion_result=30.9015;
+        AmountConversionDto amountConversionDto=AmountConversionDto.builder()
+                .conversion_result(conversion_result).build();
 
+        when(currenncyApiService.convertAmount(base,target,amount)).thenReturn(amountConversionDto);
+
+        AmountConversionDto response=this.currencyService.convertAmount(base,target,amount);
+
+        Assertions.assertThat(response).isNotNull();
+        Assertions.assertThat(response.getConversion_result()).isEqualTo(amountConversionDto.getConversion_result());
     }
 
+
+@DisplayName("JUnit test for compareCurrencies method")
     @Test
-    void compareCurrencies() {
+    void givenBaseAndListOfFavoriteCurrencies_whenCompareCurrencies_thenReturnFavoriteCurrenciesDto() {
         String base = "USD";
 
         List<String> favorites = Arrays.asList("EUR", "EGP");
@@ -62,13 +78,14 @@ class CurrencyServiceTest {
         Assertions.assertThat(response.getConversion_rates()).isEqualTo(favoriteCurrenciesDto.getConversion_rates());
     }
 
+
     @Test
     @Disabled
     void getCurrencies() {
     }
 
     @Test
-    @Disabled
     void compareTwoCurrencies() {
+
     }
 }
