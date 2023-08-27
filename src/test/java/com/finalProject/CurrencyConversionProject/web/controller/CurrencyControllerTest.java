@@ -6,6 +6,9 @@ import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.Cu
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.web.response.ResponseModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +42,12 @@ class CurrencyControllerTest {
     @DisplayName("JUnit test for convertAmount method")
     @Test
     void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() throws Exception {
+    @Mock
+    CurrencyServiceImpl currencyService;
+    @DisplayName("JUnit test for convertAmount method")
+    @Test
+    void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
         String url = "/pair-conversion";
 
         AmountConversionDto amountConversionDto = AmountConversionDto.builder()
