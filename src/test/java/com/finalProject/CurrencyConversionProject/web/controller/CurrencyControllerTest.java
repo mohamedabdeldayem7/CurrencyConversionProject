@@ -1,5 +1,14 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
+import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
+import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
@@ -13,6 +22,13 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -102,7 +118,7 @@ class CurrencyControllerTest {
         ResponseModel<?> responseModel = ResponseModel.builder()
                 .statusCode(200)
                 .status("success")
-                .data(favoriteCurrenciesDto)
+                .data(currenciesComparisonDto)
                 .build();
         String response = mapper.writeValueAsString(responseModel);
 
@@ -115,8 +131,6 @@ class CurrencyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(response));
     }
-
-
 
     @DisplayName("JUnit test for compareTwoCurrencies method")
     @Test
