@@ -1,6 +1,6 @@
 package com.finalProject.CurrencyConversionProject.currencyService;
-import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
-import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.services.apiService.CurrenncyApiServiceInterface;
+import com.finalProject.CurrencyConversionProject.services.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
