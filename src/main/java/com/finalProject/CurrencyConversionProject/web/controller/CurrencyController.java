@@ -1,6 +1,6 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
 
-import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.services.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;

@@ -1,13 +1,16 @@
-package com.finalProject.CurrencyConversionProject.currencyService.serviceImpl;
+package com.finalProject.CurrencyConversionProject.services.currencyService.serviceImpl;
 
-import com.finalProject.CurrencyConversionProject.currencyService.CurrencyServiceInterface;
+import com.finalProject.CurrencyConversionProject.dto.PairCurrenciesConversionDto;
+import com.finalProject.CurrencyConversionProject.services.CacheService;
+import com.finalProject.CurrencyConversionProject.services.currencyService.CurrencyServiceInterface;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
-import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
+import com.finalProject.CurrencyConversionProject.services.apiService.CurrenncyApiServiceInterface;
 import com.finalProject.CurrencyConversionProject.validation.InputValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -22,22 +25,31 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     private InputValidation inputValidation;
     @Autowired
     private CurrenncyApiServiceInterface currenncyApiService;
+    @Autowired
+    private CacheService cacheService;
 
 
     @Override
     public AmountConversionDto convertAmount(String base, String target, Double amount){
+        evictAllcachesAtIntervals();
+
         this.convertToUpperCase(base, target);
 
         this.inputValidation.checkCurrency(base);
         this.inputValidation.checkCurrency(target);
         this.inputValidation.checkAmount(amount);
 
-        AmountConversionDto responseObject = (AmountConversionDto) this.currenncyApiService.convertAmount(base, target, amount);;
+        PairCurrenciesConversionDto pairCurrenciesConversionDto = this.currenncyApiService.convertAmount(base, target, amount);
+        Double conversionResult = amount * pairCurrenciesConversionDto.getConversion_rate();
+        AmountConversionDto responseObject = AmountConversionDto.builder()
+                .conversion_result((conversionResult)).build();
         return responseObject;
     }
 
     @Override
     public FavoriteCurrenciesDto compareCurrencies(List<String> favoriteCurrencies, String base) {
+        evictAllcachesAtIntervals();
+
         List<String> currencies = this.convertToUpperCase(favoriteCurrencies, base);
 
         this.inputValidation.checkList(currencies, currencies.size());
@@ -57,6 +69,7 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
         return finalResponseObject;
     }
     @Override
+    @Cacheable(value = "getCurrencies", key = "#root.methodName")
     public List<Map<String, String>> getCurrencies() {
         List<Map<String, String>> currencies = Currencies.getCurrencies();
         return currencies;
@@ -64,6 +77,8 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
     @Override
     public TwoCurrenciesComparisonDto compareTwoCurrencies(String base, Double amount,String target1,String target2) {
+        evictAllcachesAtIntervals();
+
         this.convertToUpperCase(base, target1, target2);
 
         this.inputValidation.checkCurrency(base);
@@ -71,8 +86,8 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
         this.inputValidation.checkCurrency(target1);
         this.inputValidation.checkCurrency(target2);
 
-        AmountConversionDto response1 = (AmountConversionDto) this.currenncyApiService.convertAmount(base, target1, amount);
-        AmountConversionDto response2 = (AmountConversionDto) this.currenncyApiService.convertAmount(base, target2, amount);
+        AmountConversionDto response1 = this.convertAmount(base, target1, amount);
+        AmountConversionDto response2 = this.convertAmount(base, target2, amount);
 
         TwoCurrenciesComparisonDto finalResponse = TwoCurrenciesComparisonDto.builder()
                 .firstTargetCurrency(response1)
@@ -88,5 +103,9 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     private List<String> convertToUpperCase(List<String> list, String... currency){
         this.convertToUpperCase(currency);
         return list.stream().map(String::toUpperCase).collect(Collectors.toList());
+    }
+
+    private void evictAllcachesAtIntervals(){
+        this.cacheService.evictAllcachesAtIntervals();
     }
 }

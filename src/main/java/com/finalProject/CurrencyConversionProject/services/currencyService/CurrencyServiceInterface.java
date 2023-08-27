@@ -1,4 +1,4 @@
-package com.finalProject.CurrencyConversionProject.currencyService;
+package com.finalProject.CurrencyConversionProject.services.currencyService;
 
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;

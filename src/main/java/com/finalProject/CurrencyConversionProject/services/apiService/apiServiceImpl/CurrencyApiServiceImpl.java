@@ -1,11 +1,12 @@
-package com.finalProject.CurrencyConversionProject.apiService.apiServiceImpl;
+package com.finalProject.CurrencyConversionProject.services.apiService.apiServiceImpl;
 
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
-import com.finalProject.CurrencyConversionProject.apiService.CurrenncyApiServiceInterface;
+import com.finalProject.CurrencyConversionProject.dto.PairCurrenciesConversionDto;
+import com.finalProject.CurrencyConversionProject.services.apiService.CurrenncyApiServiceInterface;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Repository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -24,18 +25,23 @@ public class CurrencyApiServiceImpl implements CurrenncyApiServiceInterface {
         gson = new Gson();
     }
     @Override
-    public AmountConversionDto convertAmount(String base, String target, Double amount) {
+    @Cacheable(value = "convertAmountCache", key="#root.methodName+'['+#base+','+#target+']'")
+    public PairCurrenciesConversionDto convertAmount(String base, String target, Double amount) {
 
-        String url = baseUrl + accessKey + "/pair/" + base + "/" + target + "/" + amount.toString();
+        //String url = baseUrl + accessKey + "/pair/" + base + "/" + target + "/" + amount.toString();
+
+        String url = baseUrl + accessKey + "/pair/" + base + "/" + target;
 
         String  jsonResponse = getResponse(url);
 
-        AmountConversionDto finalresponse = gson.fromJson(jsonResponse, AmountConversionDto.class);
+        //AmountConversionDto finalresponse = gson.fromJson(jsonResponse, AmountConversionDto.class);
+        PairCurrenciesConversionDto finalresponse = gson.fromJson(jsonResponse, PairCurrenciesConversionDto.class);
 
         return finalresponse;
     }
 
     @Override
+    @Cacheable(value = "compareCurrenciesCache", key = "#base")
     public FavoriteCurrenciesDto compareCurrencies(String base) {
         String url = baseUrl + accessKey + "/latest/" + base;
 
