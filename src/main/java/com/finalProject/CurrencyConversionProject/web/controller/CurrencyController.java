@@ -25,7 +25,9 @@ public class CurrencyController {
                                                           @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
-                .data(response).statusCode(HttpStatus.OK.value()).build();
+                .data(response)
+                .status("success")
+                .statusCode(HttpStatus.OK.value()).build();
 
         return new ResponseEntity(model, HttpStatus.OK);
     }
@@ -37,7 +39,8 @@ public class CurrencyController {
         ResponseModel<FavoriteCurrenciesDto> model = ResponseModel.<FavoriteCurrenciesDto>builder()
                 .data(response)
                 .statusCode(HttpStatus.OK.value())
-                .status("success").build();
+                .status("success")
+                .build();
         return new ResponseEntity(model, HttpStatus.OK);
     }
 
@@ -48,7 +51,10 @@ public class CurrencyController {
                                                                  @RequestParam(value = "target2",required = false, defaultValue = "USD") String target2)  {
         TwoCurrenciesComparisonDto response =  this.currencyService.compareTwoCurrencies(base, amount, target1,target2);
         ResponseModel<TwoCurrenciesComparisonDto> model = ResponseModel.<TwoCurrenciesComparisonDto>builder()
-                .data(response).statusCode(HttpStatus.OK.value()).build();
+                .data(response)
+                .statusCode(HttpStatus.OK.value())
+                .status("success")
+                .build();
         return new ResponseEntity(model, HttpStatus.OK);
     }
 
@@ -56,7 +62,10 @@ public class CurrencyController {
     public ResponseEntity<ResponseModel<?>> getCurrencies(){
         List<Map<String, String>> currencies =  this.currencyService.getCurrencies();
         ResponseModel<List<Map<String, String>>> model = ResponseModel.<List<Map<String, String>>>builder()
-                .data(currencies).statusCode(HttpStatus.OK.value()).build();
+                .data(currencies)
+                .statusCode(HttpStatus.OK.value())
+                .status("success")
+                .build();
         return new ResponseEntity(model, HttpStatus.OK);
     }
 }

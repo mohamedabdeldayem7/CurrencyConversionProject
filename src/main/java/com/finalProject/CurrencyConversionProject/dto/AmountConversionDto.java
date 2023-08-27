@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AmountConversionDto implements Serializable {
+public class AmountConversionDto {
 //    private String base_code;
 //    private String target_code;
     private Double conversion_result;
