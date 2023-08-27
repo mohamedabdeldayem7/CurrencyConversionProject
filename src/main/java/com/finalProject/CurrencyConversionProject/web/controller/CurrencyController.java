@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class CurrencyController {
     @Autowired
@@ -25,7 +25,8 @@ public class CurrencyController {
                                                           @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
-                .data(response).statusCode(HttpStatus.OK.value()).build();
+                .data(response)
+                .status("success").statusCode(HttpStatus.OK.value()).build();
 
         return new ResponseEntity(model, HttpStatus.OK);
     }

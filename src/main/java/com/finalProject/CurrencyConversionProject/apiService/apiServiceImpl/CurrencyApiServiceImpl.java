@@ -20,7 +20,7 @@ public class CurrencyApiServiceImpl implements CurrenncyApiServiceInterface {
     private final WebClient webClient;
 
     public CurrencyApiServiceImpl() {
-        this.webClient = WebClient.create("");
+        this.webClient = WebClient.create();
         gson = new Gson();
     }
     @Override
