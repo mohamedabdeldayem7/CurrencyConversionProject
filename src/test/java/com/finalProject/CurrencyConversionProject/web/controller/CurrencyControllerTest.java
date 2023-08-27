@@ -1,5 +1,14 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
+import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
+import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
@@ -12,6 +21,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.ArgumentMatchers.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -34,17 +50,18 @@ class CurrencyControllerTest {
     @Autowired
     ObjectMapper mapper;
     @Mock
-    CurrencyServiceImpl currencyService;
+    private CurrencyServiceImpl currencyService;
+
     @DisplayName("JUnit test for convertAmount method")
     @Test
     void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() throws Exception {
-
         String url = "/pair-conversion";
 
         AmountConversionDto amountConversionDto = AmountConversionDto.builder()
                 .conversion_result(1.0).build();
 
-        when(currencyService.convertAmount(Mockito.anyString(), Mockito.anyString(), Mockito.anyDouble())).thenReturn(amountConversionDto);
+        when(currencyService.convertAmount(anyString(), anyString(), anyDouble())).thenReturn(amountConversionDto);
+
 
         ResponseModel<?> responseModel = ResponseModel.builder()
                 .statusCode(200)
@@ -62,7 +79,29 @@ class CurrencyControllerTest {
                 .andExpect(content().json(response));
 
     }
-    @DisplayName("JUnit test for FavoriteCurrencies method")
+
+    @DisplayName("JUnit test for getCurrencies method")
+    @Test
+    void givenCurrenciesList_whenGetCurrencies_thenReturnCurrenciesList() throws Exception {
+        String url = "/currencies";
+        List<Map<String, String>> currencies = Currencies.getCurrencies();
+
+        when(this.currencyService.getCurrencies()).thenReturn(currencies);
+
+        ResponseModel<?> responseModel = ResponseModel.builder()
+                .statusCode(200)
+                .status("success")
+                .data(currencies)
+                .build();
+        String response = mapper.writeValueAsString(responseModel);
+
+        mockMvc.perform(MockMvcRequestBuilders.get(url))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(response));
+    }
+
+    @DisplayName("JUnit test for compareCurrencies method")
     @Test
     void givenBaseAndListOfFavoriteCurrencies_whenCompareCurrencies_thenReturnFavoriteCurrenciesDto() throws Exception {
         String url="/favorite-currencies";
@@ -79,20 +118,17 @@ class CurrencyControllerTest {
         ResponseModel<?> responseModel = ResponseModel.builder()
                 .statusCode(200)
                 .status("success")
-                .data(favoriteCurrenciesDto)
+                .data(currenciesComparisonDto)
                 .build();
-        String response=mapper.writeValueAsString(responseModel);
+        String response = mapper.writeValueAsString(responseModel);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
-                                .content(mapper.writeValueAsString(favorites))
-                                .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .param("base", "USD")
-                        )
+                        .param("target1", "USD")
+                        .param("target2", "USD")
+                        .param("amount", String.valueOf(1.0)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(response));
-
     }
-
-
 }
