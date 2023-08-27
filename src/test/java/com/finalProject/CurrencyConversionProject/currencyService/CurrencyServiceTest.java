@@ -1,4 +1,6 @@
 package com.finalProject.CurrencyConversionProject.currencyService;
+import com.finalProject.CurrencyConversionProject.dto.PairCurrenciesConversionDto;
+import com.finalProject.CurrencyConversionProject.services.CacheService;
 import com.finalProject.CurrencyConversionProject.services.apiService.CurrenncyApiServiceInterface;
 import com.finalProject.CurrencyConversionProject.services.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
@@ -25,6 +27,8 @@ class CurrencyServiceTest {
     private CurrenncyApiServiceInterface currenncyApiService;
     @Mock
     private InputValidation inputValidation;
+    @Mock
+    private CacheService cacheService;
     @InjectMocks
     private CurrencyServiceImpl currencyService;
 
@@ -36,13 +40,21 @@ class CurrencyServiceTest {
     @Test
     void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() {
         String base = "USD";
-        String target = "EGP";
+        String target = "USD";
         Double amount = 1.0;
-        Double conversion_result = 30.9015;
+        Double conversionResult = 1.0;
+        Double conversionRate = 1.0;
+        PairCurrenciesConversionDto pairCurrenciesConversionDto = PairCurrenciesConversionDto.builder()
+                .base_code(base)
+                .target_code(target)
+                .conversion_rate(conversionRate).build();
         AmountConversionDto amountConversionDto = AmountConversionDto.builder()
-                .conversion_result(conversion_result).build();
-        when(currenncyApiService.convertAmount(base, target, amount)).thenReturn(amountConversionDto);
+                .conversion_result(conversionResult).build();
+
+        when(currenncyApiService.convertAmount(base, target, amount)).thenReturn(pairCurrenciesConversionDto);
+
         AmountConversionDto response = this.currencyService.convertAmount(base, target, amount);
+
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getConversion_result()).isEqualTo(amountConversionDto.getConversion_result());
     }
@@ -83,18 +95,31 @@ class CurrencyServiceTest {
     void givenBaseAndAmountAndTarget1AndTarget2_whenConvertAmount_thenReturnTwoCurrenciesComparisonDto() {
         String base="USD";
         Double amount=1.0;
-        String target1="EGP";
-        String target2="EUR";
+        String target1="USD";
+        String target2="USD";
+        Double conversionResult = 1.0;
+        Double conversionRate = 1.0;
+        PairCurrenciesConversionDto firstPairCurrenciesConversion = PairCurrenciesConversionDto.builder()
+                .base_code(base)
+                .target_code(target1)
+                .conversion_rate(conversionRate).build();
+        PairCurrenciesConversionDto secondPairCurrenciesConversion = PairCurrenciesConversionDto.builder()
+                .base_code(base)
+                .target_code(target2)
+                .conversion_rate(conversionRate).build();
         AmountConversionDto firstTargetCurrency= AmountConversionDto.builder()
-                .conversion_result(30.9015).build();
+                .conversion_result(conversionResult).build();
         AmountConversionDto secondTargetCurrency= AmountConversionDto.builder()
-                .conversion_result(0.9262).build();
+                .conversion_result(conversionResult).build();
         TwoCurrenciesComparisonDto expectedResponse=TwoCurrenciesComparisonDto.builder()
                 .firstTargetCurrency(firstTargetCurrency)
                 .secondTargetCurrency(secondTargetCurrency).build();
-        when(currenncyApiService.convertAmount(base,target1,amount)).thenReturn(firstTargetCurrency);
-        when(currenncyApiService.convertAmount(base,target2,amount)).thenReturn(secondTargetCurrency);
+
+        when(currenncyApiService.convertAmount(base,target1,amount)).thenReturn(firstPairCurrenciesConversion);
+        when(currenncyApiService.convertAmount(base,target2,amount)).thenReturn(secondPairCurrenciesConversion);
+
         TwoCurrenciesComparisonDto response=this.currencyService.compareTwoCurrencies(base,amount,target1,target2);
+
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getFirstTargetCurrency().getConversion_result()).isEqualTo(firstTargetCurrency.getConversion_result());
         Assertions.assertThat(response.getSecondTargetCurrency().getConversion_result()).isEqualTo(secondTargetCurrency.getConversion_result());
