@@ -9,6 +9,10 @@ import com.finalProject.CurrencyConversionProject.model.constants.Currencies;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
+import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
+import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.web.response.ResponseModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +28,15 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.*;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -42,18 +55,13 @@ class CurrencyControllerTest {
     @DisplayName("JUnit test for convertAmount method")
     @Test
     void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() throws Exception {
-    @Mock
-    CurrencyServiceImpl currencyService;
-    @DisplayName("JUnit test for convertAmount method")
-    @Test
-    void givenBaseAndTargetAndAmount_whenConvertAmount_thenReturnAmountConversionDto() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
         String url = "/pair-conversion";
 
         AmountConversionDto amountConversionDto = AmountConversionDto.builder()
                 .conversion_result(1.0).build();
 
         when(currencyService.convertAmount(anyString(), anyString(), anyDouble())).thenReturn(amountConversionDto);
+
 
         ResponseModel<?> responseModel = ResponseModel.builder()
                 .statusCode(200)
@@ -96,17 +104,16 @@ class CurrencyControllerTest {
     @DisplayName("JUnit test for compareCurrencies method")
     @Test
     void givenBaseAndListOfFavoriteCurrencies_whenCompareCurrencies_thenReturnFavoriteCurrenciesDto() throws Exception {
-        String url = "/comparison";
-        AmountConversionDto amountConversionDto1 = AmountConversionDto.builder()
-                .conversion_result(1.0).build();
-        AmountConversionDto amountConversionDto2 = AmountConversionDto.builder()
-                .conversion_result(1.0).build();
-        TwoCurrenciesComparisonDto currenciesComparisonDto = TwoCurrenciesComparisonDto.builder()
-                .firstTargetCurrency(amountConversionDto1)
-                .secondTargetCurrency(amountConversionDto2
-                ).build();
+        String url="/favorite-currencies";
+        String base = "USD";
+        List<String> favorites = Arrays.asList("USD", "USD");
+        Map<String, Double> conversionRates = new HashMap<>();
+        conversionRates.put(favorites.get(0), 1.0);
+        conversionRates.put(favorites.get(1), 1.0);
+        FavoriteCurrenciesDto favoriteCurrenciesDto=FavoriteCurrenciesDto.builder()
+                .conversion_rates(conversionRates).build();
 
-        when(this.currencyService.compareTwoCurrencies(anyString(), anyDouble(), anyString(), anyString()));
+        when(currencyService.compareCurrencies(favorites,base)).thenReturn(favoriteCurrenciesDto);
 
         ResponseModel<?> responseModel = ResponseModel.builder()
                 .statusCode(200)
@@ -124,5 +131,4 @@ class CurrencyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(response));
     }
-
 }
