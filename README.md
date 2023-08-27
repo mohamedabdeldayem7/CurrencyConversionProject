@@ -139,12 +139,12 @@ GET : localhost:8080/currencies
         {
             "code": "EUR",
             "name": "Europe Union",
-            "url": "*********"
+            "flagUrl": "*********"
         },
         {
             "code": "USD",
             "name": "United States",
-            "url": "*********"
+            "flagUrl": "*********"
         }
     ]
 }
