@@ -1,4 +1,4 @@
-package com.finalProject.CurrencyConversionProject.controller;
+package com.finalProject.CurrencyConversionProject.web.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalProject.CurrencyConversionProject.currencyService.serviceImpl.CurrencyServiceImpl;
