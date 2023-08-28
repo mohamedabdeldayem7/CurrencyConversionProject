@@ -35,12 +35,15 @@ public class CurrencyController {
     @PostMapping("/favorite-currencies")
     public ResponseEntity<ResponseModel<?>> getConversionRates(@RequestBody List<String>currencies,
                                                                @RequestParam(value = "base",required = false, defaultValue = "USD") String base){
-        FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
-        ResponseModel<FavoriteCurrenciesDto> model = ResponseModel.<FavoriteCurrenciesDto>builder()
+//        FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
+        List<Double> response = this.currencyService.compareCurrencies(currencies,base);
+
+        ResponseModel<List<Double>> model = ResponseModel.<List<Double>>builder()
                 .data(response)
                 .statusCode(HttpStatus.OK.value())
                 .status("success")
                 .build();
+
         return new ResponseEntity(model, HttpStatus.OK);
     }
 

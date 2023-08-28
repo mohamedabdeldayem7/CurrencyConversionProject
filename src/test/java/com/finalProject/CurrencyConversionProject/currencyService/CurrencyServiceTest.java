@@ -61,25 +61,26 @@ class CurrencyServiceTest {
     @DisplayName("JUnit test for compareCurrencies method")
     @Test
     void givenBaseAndListOfFavoriteCurrencies_whenCompareCurrencies_thenReturnFavoriteCurrenciesDto() {
-        String base = "USD";
 
-        List<String> favorites = Arrays.asList("EUR", "EGP");
+        List<String> favorites = Arrays.asList("USD", "USD");
 
         Map<String, Double> conversionRates = new HashMap<>();
-        conversionRates.put(favorites.get(0), 0.9262);
-        conversionRates.put(favorites.get(1), 30.9015);
+        conversionRates.put(favorites.get(0), 1.0);
+        conversionRates.put(favorites.get(1), 1.0);
 
         FavoriteCurrenciesDto favoriteCurrenciesDto = FavoriteCurrenciesDto.builder()
                 .conversion_rates(conversionRates).build();
 
-        when(currenncyApiService.compareCurrencies(base)).thenReturn(favoriteCurrenciesDto);
-        //willDoNothing().given(inputValidation).checkCurrency(anyString());
-        //willDoNothing().given(inputValidation).checkList(favorites, favorites.size());
+        List<Double> expected = Arrays.asList(1.0, 1.0);
 
-        FavoriteCurrenciesDto response = this.currencyService.compareCurrencies(favorites, base);
+        when(currenncyApiService.compareCurrencies("USD")).thenReturn(favoriteCurrenciesDto);
+
+        List<Double> response = this.currencyService.compareCurrencies(favorites, "USD");
 
         Assertions.assertThat(response).isNotNull();
-        Assertions.assertThat(response.getConversion_rates()).isEqualTo(favoriteCurrenciesDto.getConversion_rates());
+        Assertions.assertThat(response).isEqualTo(expected);
+
+
     }
 
     @Test
