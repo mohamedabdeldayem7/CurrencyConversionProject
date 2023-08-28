@@ -1,6 +1,5 @@
 package com.finalProject.CurrencyConversionProject.web.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalProject.CurrencyConversionProject.services.currencyService.serviceImpl.CurrencyServiceImpl;
 import com.finalProject.CurrencyConversionProject.dto.AmountConversionDto;
@@ -17,8 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import javax.swing.event.ListDataEvent;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
@@ -95,19 +92,20 @@ class CurrencyControllerTest {
         String url="/favorite-currencies";
         String base = "USD";
         List<String> favorites = Arrays.asList("USD", "USD");
+        Map<String, Double> conversionRates = new HashMap<>();
+        conversionRates.put(favorites.get(0), 1.0);
+        conversionRates.put(favorites.get(1), 1.0);
+        FavoriteCurrenciesDto favoriteCurrenciesDto=FavoriteCurrenciesDto.builder()
+                .conversion_rates(conversionRates).build();
 
-        List<Double> expected = Arrays.asList(1.0, 1.0);
-
-        when(this.currencyService.compareCurrencies(favorites,base)).thenReturn(expected);
-
-        List<Double> response = this.currencyService.compareCurrencies(favorites,base);
+        when(this.currencyService.compareCurrencies(favorites,base)).thenReturn(favoriteCurrenciesDto);
 
         ResponseModel<?> responseModel = ResponseModel.builder()
                 .statusCode(200)
                 .status("success")
-                .data(response)
+                .data(favoriteCurrenciesDto)
                 .build();
-        String finalResponse = mapper.writeValueAsString(responseModel);
+        String response = mapper.writeValueAsString(responseModel);
 
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .content(mapper.writeValueAsString(favorites))
@@ -116,7 +114,7 @@ class CurrencyControllerTest {
                         )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(finalResponse));
+                .andExpect(content().json(response));
     }
 
     @DisplayName("JUnit test for compareTwoCurrencies method")

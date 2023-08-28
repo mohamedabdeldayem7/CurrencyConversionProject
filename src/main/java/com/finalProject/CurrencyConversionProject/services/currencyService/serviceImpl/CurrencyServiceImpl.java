@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +47,7 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
     }
 
     @Override
-    public List<Double> compareCurrencies(List<String> favoriteCurrencies, String base) {
+    public FavoriteCurrenciesDto compareCurrencies(List<String> favoriteCurrencies, String base) {
         evictAllcachesAtIntervals();
 
         List<String> currencies = this.convertToUpperCase(favoriteCurrencies, base);
@@ -59,11 +62,9 @@ public class CurrencyServiceImpl implements CurrencyServiceInterface {
 
         currencies.stream().forEach(currency -> finalResponseMap.put(currency, responseMap.get(currency)));
 
-//        FavoriteCurrenciesDto finalResponseObject = FavoriteCurrenciesDto.builder()
-//                .conversion_rates(finalResponseMap)
-//                .build();
-        List<Double> finalResponseObject = new ArrayList<>();
-        currencies.stream().forEach(currency -> finalResponseObject.add(finalResponseMap.get(currency)));
+        FavoriteCurrenciesDto finalResponseObject = FavoriteCurrenciesDto.builder()
+                .conversion_rates(finalResponseMap)
+                .build();
 
         return finalResponseObject;
     }

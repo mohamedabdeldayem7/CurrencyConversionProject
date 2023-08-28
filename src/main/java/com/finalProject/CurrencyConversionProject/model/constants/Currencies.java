@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Map;
 @Getter
 
+
 public enum Currencies {
-    EUR("EUR","Europe Union","https://flagcdn.com/32x24/eu.png"),
+    EUR("EUR","Europe Union","https://flagcdn.com/w80/eu.png"),
     USD("USD","United States","https://flagsapi.com/US/flat/64.png"),
     GBP("GBP","England","https://flagsapi.com/GB/flat/64.png"),
     AED("AED","The United Arab Emirates","https://flagsapi.com/AE/flat/64.png"),
