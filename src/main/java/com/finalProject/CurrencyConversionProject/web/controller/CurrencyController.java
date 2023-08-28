@@ -6,7 +6,6 @@ import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.web.response.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +18,8 @@ import java.util.Map;
 public class CurrencyController {
     @Autowired
     private CurrencyServiceImpl currencyService;
-
     @GetMapping("/pair-conversion")
-    public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD")  String base,
+    public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
                                                           @RequestParam(value = "target",required = false, defaultValue = "USD") String target,
                                                           @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
@@ -29,19 +27,21 @@ public class CurrencyController {
                 .data(response)
                 .status("success")
                 .statusCode(HttpStatus.OK.value()).build();
-
         return new ResponseEntity(model, HttpStatus.OK);
     }
 
     @PostMapping("/favorite-currencies")
     public ResponseEntity<ResponseModel<?>> getConversionRates(@RequestBody List<String>currencies,
                                                                @RequestParam(value = "base",required = false, defaultValue = "USD") String base){
-        FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
-        ResponseModel<FavoriteCurrenciesDto> model = ResponseModel.<FavoriteCurrenciesDto>builder()
+//        FavoriteCurrenciesDto response =  this.currencyService.compareCurrencies(currencies,base);
+        List<Double> response = this.currencyService.compareCurrencies(currencies,base);
+
+        ResponseModel<List<Double>> model = ResponseModel.<List<Double>>builder()
                 .data(response)
                 .statusCode(HttpStatus.OK.value())
                 .status("success")
                 .build();
+
         return new ResponseEntity(model, HttpStatus.OK);
     }
 
