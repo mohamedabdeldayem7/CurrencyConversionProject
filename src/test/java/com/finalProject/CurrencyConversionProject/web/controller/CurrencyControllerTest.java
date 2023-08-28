@@ -16,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import javax.swing.event.ListDataEvent;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
@@ -92,20 +94,19 @@ class CurrencyControllerTest {
         String url="/favorite-currencies";
         String base = "USD";
         List<String> favorites = Arrays.asList("USD", "USD");
-        Map<String, Double> conversionRates = new HashMap<>();
-        conversionRates.put(favorites.get(0), 1.0);
-        conversionRates.put(favorites.get(1), 1.0);
-        FavoriteCurrenciesDto favoriteCurrenciesDto=FavoriteCurrenciesDto.builder()
-                .conversion_rates(conversionRates).build();
 
-        when(this.currencyService.compareCurrencies(favorites,base)).thenReturn(favoriteCurrenciesDto);
+        List<Double> expected = Arrays.asList(1.0, 1.0);
+
+        when(this.currencyService.compareCurrencies(favorites,base)).thenReturn(expected);
+
+        List<Double> response = this.currencyService.compareCurrencies(favorites,base);
 
         ResponseModel<?> responseModel = ResponseModel.builder()
                 .statusCode(200)
                 .status("success")
-                .data(favoriteCurrenciesDto)
+                .data(response)
                 .build();
-        String response = mapper.writeValueAsString(responseModel);
+        String finalResponse = mapper.writeValueAsString(responseModel);
 
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .content(mapper.writeValueAsString(favorites))
@@ -114,7 +115,7 @@ class CurrencyControllerTest {
                         )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json(response));
+                .andExpect(content().json(finalResponse));
     }
 
     @DisplayName("JUnit test for compareTwoCurrencies method")
