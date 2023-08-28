@@ -19,7 +19,6 @@ import java.util.Map;
 public class CurrencyController {
     @Autowired
     private CurrencyServiceImpl currencyService;
-
     @GetMapping("/pair-conversion")
     public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD")  String base,
                                                           @RequestParam(value = "target",required = false, defaultValue = "USD") String target,
@@ -29,7 +28,6 @@ public class CurrencyController {
                 .data(response)
                 .status("success")
                 .statusCode(HttpStatus.OK.value()).build();
-
         return new ResponseEntity(model, HttpStatus.OK);
     }
 
