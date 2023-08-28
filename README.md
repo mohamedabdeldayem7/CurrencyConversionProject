@@ -40,7 +40,7 @@ GET : localhost:8080/pair-conversion
 GET : {base_url}/comparison
 	?base={base_currency}
 	&target1={target_currency_1}
-	&target={target_currency_2}
+	&target2={target_currency_2}
 	&amount={amount}
 ```
 
