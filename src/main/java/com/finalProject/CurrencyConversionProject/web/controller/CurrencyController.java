@@ -22,9 +22,9 @@ public class CurrencyController {
     private CurrencyServiceImpl currencyService;
 
     @GetMapping("/pair-conversion")
-    public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD") @Valid String base,
-                                                          @RequestParam(value = "target",required = false, defaultValue = "USD") @Valid String target,
-                                                          @RequestParam(value = "amount",required = false, defaultValue = "0.0") @Valid Double amount)  {
+    public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD")  String base,
+                                                          @RequestParam(value = "target",required = false, defaultValue = "USD") String target,
+                                                          @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
                 .data(response)
