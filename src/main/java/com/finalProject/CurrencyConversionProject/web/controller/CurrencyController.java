@@ -6,10 +6,12 @@ import com.finalProject.CurrencyConversionProject.dto.FavoriteCurrenciesDto;
 import com.finalProject.CurrencyConversionProject.dto.TwoCurrenciesComparisonDto;
 import com.finalProject.CurrencyConversionProject.web.response.ResponseModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +22,9 @@ public class CurrencyController {
     private CurrencyServiceImpl currencyService;
 
     @GetMapping("/pair-conversion")
-    public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD") String base,
-                                                          @RequestParam(value = "target",required = false, defaultValue = "USD") String target,
-                                                          @RequestParam(value = "amount",required = false, defaultValue = "0.0") Double amount)  {
+    public ResponseEntity<ResponseModel<?>> convertAmount(@RequestParam(value = "base",required = false, defaultValue = "USD") @Valid String base,
+                                                          @RequestParam(value = "target",required = false, defaultValue = "USD") @Valid String target,
+                                                          @RequestParam(value = "amount",required = false, defaultValue = "0.0") @Valid Double amount)  {
         AmountConversionDto response =  this.currencyService.convertAmount(base, target, amount);
         ResponseModel<AmountConversionDto> model = ResponseModel.<AmountConversionDto>builder()
                 .data(response)
